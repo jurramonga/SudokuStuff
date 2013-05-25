@@ -1,7 +1,7 @@
-SudokuSuite
+SudokuStuff
 ===========
 
-SudouSuite is a framework written in Java for creating and manipulating Sudoku puzzles.
+SudouStuff is a framework written in Java for creating and manipulating Sudoku puzzles.
 
 
 
