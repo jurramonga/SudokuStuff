@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import solutions.BacktrackSolver;
 import tools.SudokuBoard;
-import tools.Tools;
 
 public class BacktrackSolverTest 
 {
@@ -14,7 +13,7 @@ public class BacktrackSolverTest
 	{
 		SudokuBoard input = SudokuReader.readFromFile("res\\boards\\obsPuzzle");
 		System.out.println("## Input Puzzle:");
-		Tools.printBoard(input);
+		input.print();
 		System.out.println();
 		
 		ArrayList<SudokuBoard> solutions = BacktrackSolver.findSolutions(input);		
@@ -25,7 +24,7 @@ public class BacktrackSolverTest
 			for(int i = 0; i < solutions.size(); i++)
 			{
 				System.out.println("## Solution #" + (i + 1) + ":\n");
-				Tools.printBoard(solutions.get(i));
+				solutions.get(i).print();
 				System.out.println();
 			}
 		}

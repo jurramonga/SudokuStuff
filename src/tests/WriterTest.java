@@ -12,7 +12,8 @@ import tools.SudokuBoard;
 
 public class WriterTest 
 {
-	public static final int TEST_CASES = 1;
+	public static final int TEST_CASES = 5;
+	public static final int BOARD_SIZE = 16;
 	
 	public static void main(String[] args)
 	{
@@ -20,12 +21,13 @@ public class WriterTest
 		long start = System.currentTimeMillis();
 		
 		SudokuBoard board;
-		BacktrackGenerator bg = new BacktrackGenerator();
+		BacktrackGenerator bg = new BacktrackGenerator(BOARD_SIZE,53);
+		int root = (int)Math.sqrt(BOARD_SIZE);
 		
 		for (int i = 1; i <= TEST_CASES; i++)
 		{
 			board = bg.generate();	
-			SudokuWriter.writeToFile(board, "res\\boards\\btgen" + i + ".txt");
+			SudokuWriter.writeToFile(board, "res\\boards\\" + root + "x" + root + "-" + i + ".sdkp");
 		
 		}
 		

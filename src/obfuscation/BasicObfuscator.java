@@ -6,15 +6,19 @@ import solutions.BacktrackSolver;
 import tools.SudokuBoard;
 
 /**
- * BacktrackObfuscator.java
+ * BasicObfuscator.java
  * @author Jason Prindle
  *
- * This isn't backtracking...
+ * Sets a random number of cells to 0, checking after each one to be sure the puzzle still has 1 solution.
  */
+
+//TODO: Prevent this class from locking up (by becoming unsolvable)
+//TODO: Improve speed by keeping track of (and skipping) cells that can't be changed
+
 public class BasicObfuscator extends Obfuscator
 {
-	public static final int MAX_DELETED_CELLS = 60;
-	public static final int MIN_DELETED_CELLS = 50;
+	public static final int MAX_DELETED_CELLS = 30;
+	public static final int MIN_DELETED_CELLS = 20;
 
 	SudokuBoard board;
 	Random r;
@@ -30,18 +34,20 @@ public class BasicObfuscator extends Obfuscator
 		r = new Random(seed);
 	}
 	
-	public SudokuBoard obfuscate(SudokuBoard board)
+	public SudokuBoard obfuscate(SudokuBoard board, float percentage)
 	{
 		completed = false;
 		this.board = new SudokuBoard(board);
 		
+		int removalCount = (int)(Math.pow(board.getBoardSize(), 2) * percentage);
+		
 		//Check that the starting board is a valid, solved puzzle
-		for(int i = 0; i < 9; i++)
+		for(int i = 0; i < board.getBoardSize(); i++)
 		{
-			for (int j = 0; j < 9; j++)
+			for (int j = 0; j < board.getBoardSize(); j++)
 			{
 				int cellValue = board.getCell(j,i);
-				if (cellValue < 1 || cellValue > 9)
+				if (cellValue < 1 || cellValue > board.getBoardSize())
 				{
 					System.out.println("Invalid puzzle. Can't be obfuscated.");
 					return null;
@@ -49,7 +55,7 @@ public class BasicObfuscator extends Obfuscator
 			}
 		}	
 		
-		int count = MIN_DELETED_CELLS - r.nextInt(MAX_DELETED_CELLS - MIN_DELETED_CELLS);
+		int count = removalCount;
 		clearCell(count);
 		return this.board;
 	}
@@ -71,8 +77,8 @@ public class BasicObfuscator extends Obfuscator
 		{
 			do
 			{
-				row = r.nextInt(9);
-				column = r.nextInt(9);
+				row = r.nextInt(board.getBoardSize());
+				column = r.nextInt(board.getBoardSize());
 				oldValue = board.getCell(row,column);
 			}
 			while (oldValue == 0);

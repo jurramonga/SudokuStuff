@@ -8,7 +8,6 @@ import obfuscation.BasicObfuscator;
 import solutions.BacktrackSolver;
 import solutions.SudokuChecker;
 import tools.SudokuBoard;
-import tools.Tools;
 
 /**
  * PipelineTest.java
@@ -20,13 +19,15 @@ import tools.Tools;
 
 public class PipelineTest 
 {
+	public static final int BOARD_SIZE = 16;
+	public static final int SEED = 20947;
 	public static final int TEST_CASES = 100;
-	public static final int SEED = 209647;
+	
 	static ArrayList<SudokuBoard> boards;
 	
 	public static void main(String[] args)
 	{
-		BacktrackGenerator gen = new BacktrackGenerator(SEED);
+		BacktrackGenerator gen = new BacktrackGenerator(BOARD_SIZE, SEED);
 		BasicObfuscator obs = new BasicObfuscator(SEED);
 		
 		long trueStart;
@@ -59,7 +60,8 @@ public class PipelineTest
 		
 		for (int i = 0; i < TEST_CASES; i++)
 		{
-			boards.set(i, obs.obfuscate(boards.get(i)));
+			System.out.println("Obs #" + i);
+			boards.set(i, obs.obfuscate(boards.get(i), 0.5f));
 		}
 		
 		total = System.currentTimeMillis() - start;

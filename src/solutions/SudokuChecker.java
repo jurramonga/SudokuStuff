@@ -7,6 +7,8 @@ import tools.SudokuBoard;
 
 public class SudokuChecker 
 {	
+	static SudokuBoard board;
+	
 	/*public static boolean checkSolution(SudokuBoard sudokuBoard)
 	{		
 		//int[][] board = sudokuBoard.getBoard();
@@ -39,11 +41,12 @@ public class SudokuChecker
 		return true;
 	}*/
 	
-	public static boolean checkSolution(SudokuBoard board)
+	public static boolean checkSolution(SudokuBoard oldBoard)
 	{
+		board = new SudokuBoard(oldBoard);
 		ArrayList<Integer> group;
 		
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < board.getBoardSize(); i++)
 		{
 			//For each row
 			group = board.getRowValues(i);
@@ -58,7 +61,8 @@ public class SudokuChecker
 				return false;
 			
 			//For each major cell
-			group = board.getMajorCellValues(i / 3, i % 3);
+			int root = board.getBoardRootSize();
+			group = board.getMajorCellValues(i / root, i % root);
 			
 			if (!checkGroup(group))
 				return false;	
@@ -69,15 +73,16 @@ public class SudokuChecker
 	
 	private static boolean checkGroup(ArrayList<Integer> group)
 	{
-		boolean[] found = new boolean[9];
+		int size = board.getBoardSize();
+		boolean[] found = new boolean[size];
 		
-		if (group.size() != 9)
+		if (group.size() != size)
 		{
 			System.out.println("Invalid group size.");
 			return false;
 		}
 		
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < size; i++)
 		{
 			if (found[group.get(i) - 1] == true)
 				return false;

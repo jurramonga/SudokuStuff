@@ -1,28 +1,29 @@
 package tests;
 
+import generation.BacktrackGenerator;
+
 import java.util.ArrayList;
 
-import generation.BacktrackGenerator;
 import obfuscation.BasicObfuscator;
-import obfuscation.RandomObfuscator;
 import tools.SudokuBoard;
-import tools.Tools;
 
 public class BasicObfuscatorTest 
 {
-	public static final int SEED = 25873;
-	public static final int TEST_CASES = 1000;
+	public static final int SEED = 2545;
+	public static final int TEST_CASES = 10;
 	
 	public static void main(String[] args)
 	{
 		ArrayList<SudokuBoard> boards = new ArrayList<SudokuBoard>();
-		BacktrackGenerator gen = new BacktrackGenerator(SEED);
+		BacktrackGenerator gen = new BacktrackGenerator(16, SEED);
 		
 		System.out.println("Generating " + TEST_CASES + " boards.");
 		for (int i = 0; i < TEST_CASES; i++)
 		{			
+			System.out.println("Generating board #" + i);
 			boards.add(gen.generate());
-			//Tools.printBoard(board);
+			//boards.get(i).print();
+			//Tools.printBoard(boards.get(i));
 		}		
 		
 		BasicObfuscator obs = new BasicObfuscator(SEED);
@@ -32,7 +33,8 @@ public class BasicObfuscatorTest
 		
 		for (int i = 0; i < TEST_CASES; i++)
 		{
-			obs.obfuscate(boards.get(i));
+			boards.set(i, obs.obfuscate(boards.get(i), 0.5f));
+			boards.get(i).print();
 			System.out.println("Puzzle #" + i + " complete.");
 		}
 		

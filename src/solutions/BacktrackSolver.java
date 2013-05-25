@@ -24,7 +24,7 @@ public class BacktrackSolver
 	public static ArrayList<SudokuBoard> findSolutions(SudokuBoard inputBoard)
 	{
 		completed = false;
-		board = new SudokuBoard(inputBoard.getBoard());
+		board = new SudokuBoard(inputBoard);
 		boards = new ArrayList<SudokuBoard>();
 		
 		fillCell(0);
@@ -35,9 +35,9 @@ public class BacktrackSolver
 	private static void fillCell(int position)
 	{
 		//If the puzzle is completed...
-		if (position > 80)
+		if (position > Math.pow(board.getBoardSize(), 2) - 1)
 		{
-			boards.add(new SudokuBoard(board.getBoard()));
+			boards.add(new SudokuBoard(board));
 		}
 		//If this cell is already filled in, skip it.
 		else if (board.getCell(position) != 0)
@@ -48,7 +48,7 @@ public class BacktrackSolver
 		else if(board.getCell(position) == 0)
 		{
 			//Consider all numbers as legal options
-			boolean[] valid = new boolean[9];
+			boolean[] valid = new boolean[board.getBoardSize()];
 			Arrays.fill(valid, Boolean.TRUE);
 			
 			//Remove illegal options
@@ -60,7 +60,7 @@ public class BacktrackSolver
 			}			
 			
 			//Use each legal option
-			for (int i = 0; i < 9; i++)
+			for (int i = 0; i < board.getBoardSize(); i++)
 			{
 				if (valid[i])
 				{

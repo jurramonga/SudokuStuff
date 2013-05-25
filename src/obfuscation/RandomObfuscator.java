@@ -2,16 +2,21 @@ package obfuscation;
 
 import java.util.Random;
 
-import solutions.BacktrackSolver;
+import tools.Log;
 import tools.SudokuBoard;
-import tools.Tools;
+
+/**
+ * RandomObfuscator.java
+ * @author Jason Prindle
+ *
+ * RandomObfuscator will take a filled Sudoku board, and randomly remove (replace with a 0) a number of cells.
+ * The generated puzzle is not guaranteed to have a single solution.
+ */
 
 public class RandomObfuscator extends Obfuscator
 {
 	Random r;
-	public static final int MAX_DELETED_CELLS = 60;
-	public static final int MIN_DELETED_CELLS = 45;
-	
+
 	public RandomObfuscator()
 	{
 		r = new Random();
@@ -22,55 +27,42 @@ public class RandomObfuscator extends Obfuscator
 		r = new Random(seed);
 	}
 	
-	public SudokuBoard obfuscate(SudokuBoard board)
+	
+	public SudokuBoard obfuscate(SudokuBoard board, float percentage)
 	{
-		//Check that the starting board is a valid, solved puzzle
-		for(int i = 0; i < 9; i++)
+		if (percentage < 0f || percentage > 1f)
 		{
-			for (int j = 0; j < 9; j++)
-			{
-				int cellValue = board.getCell(j,i);
-				if (cellValue < 1 || cellValue > 9)
-				{
-					System.out.println("Invalid puzzle. Can't be obfuscated.");
-					return null;
-				}
-			}
+			Log.output("ERROR: Cannot obfuscate board. Percentage value is invalid (0 <= percentage <= 1): " + percentage);
+			return null;
 		}
 		
-		int solutions = 0;
-		//int attempts = 0;
-		
-		SudokuBoard puzzle = new SudokuBoard();
-		while(solutions != 1)
+		if (!board.isFilled())
 		{
-			puzzle = new SudokuBoard(board);
-			//attempts++;
-			//System.out.println("Attempt #" + attempts + ".");
-			//Tools.printBoard(puzzle);
+			Log.output("ERROR: Cannot obfuscate board. Board contains a zero-value.");
+			return null;
+		}
+		
+		int size = board.getBoardSize();
+		int removalCount = (int)(Math.pow(board.getBoardSize(), 2) * percentage);
+		SudokuBoard puzzle = new SudokuBoard(board);
+		
+		int row;
+		int column;
+		int value;	
+		while (removalCount > 0)
+		{
+			row = r.nextInt(size);
+			column = r.nextInt(size);			
+			value = puzzle.getCell(row, column);
 			
-			for (int i = 0; i < MIN_DELETED_CELLS + r.nextInt(MAX_DELETED_CELLS-MIN_DELETED_CELLS); i++)
+			//TODO: Keep track of values that have already been cleared and prevent them from being selected again.
+			if (value != 0)
 			{
-				int row;
-				int column;
-				
-				do
-				{
-					row = r.nextInt(9);
-					column = r.nextInt(9);
-				}
-				while (puzzle.getCell(row,column) == 0);
-				
-				puzzle.setCell(row,column,0);
+				puzzle.setCell(row, column, 0);
+				removalCount--;
 			}
-			
-			//Check how many solutions the generated puzzle has
-			BacktrackSolver solver = new BacktrackSolver();
-			solutions = solver.findSolutions(puzzle).size();
 		}
 		
 		return puzzle;
 	}
-	
-	
 }

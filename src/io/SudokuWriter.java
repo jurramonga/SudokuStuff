@@ -15,11 +15,12 @@ public class SudokuWriter
 			FileWriter fstream = new FileWriter(filename);
 			BufferedWriter out = new BufferedWriter(fstream);
 			  
-			for (int i = 0; i < 9; i++)
+			out.write(board.getBoardSize() + "\n");
+			for (int i = 0; i < board.getBoardSize(); i++)
 			{
-				for (int j = 0; j < 9; j++)
+				for (int j = 0; j < board.getBoardSize(); j++)
 				{
-					out.write(String.valueOf(board.getCell(j,i)));
+					out.write(String.valueOf(board.getCell(j,i) + "\t"));
 				}
 			
 				out.write("\n");

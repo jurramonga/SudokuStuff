@@ -5,40 +5,49 @@ import generation.BacktrackGenerator;
 import java.util.ArrayList;
 
 import obfuscation.RandomObfuscator;
+import tools.Log;
 import tools.SudokuBoard;
-import tools.Tools;
 
 public class RandomObfuscatorTest 
 {
-	public static final int SEED = 25873;
-	public static final int TEST_CASES = 100;
+	//SEED Notes:
+	//984312, gets stuck generating board #95 making 16x16 boards.
+	public static final int SEED = 984312;
+	public static final int TEST_CASES = 10;
 	
 	public static void main(String[] args)
 	{		
 		ArrayList<SudokuBoard> boards = new ArrayList<SudokuBoard>();
-		BacktrackGenerator gen = new BacktrackGenerator(SEED);
+		BacktrackGenerator gen = new BacktrackGenerator(16, SEED);
 		
 		System.out.println("Generating " + TEST_CASES + " boards.");
 		for (int i = 0; i < TEST_CASES; i++)
 		{			
+			Log.output("Generating board #" + i);
 			boards.add(gen.generate());
-			//Tools.printBoard(board);
-		}		
+			//boards.get(i).print();
+		}
+		
+		for (int i = 0; i < TEST_CASES; i++)
+		{
+			boards.get(i).print();
+		}
 		
 		RandomObfuscator obs = new RandomObfuscator(SEED);
 		
-		System.out.println("Obfuscating " + TEST_CASES + " boards.");
+		Log.output("Obfuscating " + TEST_CASES + " boards.");
 		long start = System.currentTimeMillis();
 		
 		for (int i = 0; i < TEST_CASES; i++)
 		{
-			obs.obfuscate(boards.get(i));
-			System.out.println("Puzzle #" + i + " complete.");
+			boards.set(i, obs.obfuscate(boards.get(i), 0.5f));
+			boards.get(i).print();
+			Log.output("Puzzle #" + i + " complete.\n");
 		}
 		
 		long end = System.currentTimeMillis();
 		long total = end - start;
 		
-		System.out.println("Obfuscated " + TEST_CASES + " puzzles in " + total + "ms (" + total/(float)TEST_CASES + "ms/each).");		
+		Log.output("Obfuscated " + TEST_CASES + " puzzles in " + total + "ms (" + total/(float)TEST_CASES + "ms/each).");		
 	}
 }

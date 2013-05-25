@@ -2,7 +2,6 @@ package tests;
 
 import generation.RandomGenerator;
 import tools.SudokuBoard;
-import tools.Tools;
 
 public class RandomGenerationTest 
 {
@@ -10,11 +9,11 @@ public class RandomGenerationTest
 	
 	public static void main(String[] args)
 	{
-		RandomGenerator rg = new RandomGenerator(SEED);
+		RandomGenerator rg = new RandomGenerator(16, SEED);
 		
 		SudokuBoard board = rg.generate();
 		
-		Tools.printBoard(board);
+		board.print();
 	}
 
 }
