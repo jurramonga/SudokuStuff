@@ -15,8 +15,6 @@ import tools.SudokuBoard;
  * 
  */
 
-//TODO: Find out why the generator stalls (or if it does...)
-
 public class BacktrackGenerator extends Generator 
 {
 	public static final int STUCK_THRESHOLD = 10000;
@@ -65,14 +63,14 @@ public class BacktrackGenerator extends Generator
 		}
 		
 		Log.output("BacktrackGenerator: Completed a size " + boardSize + "board.");
-		Log.output(board.toString());
+		//Log.output(board.toString());
 		
 		return board;
 	}
 	
 	private void fillCell(int position)
 	{
-		//Check to make sure the puzzle hasn't been stalled for a while...
+		//Stalled puzzle 
 		if(position > furthestPosition)
 		{
 			furthestPosition = position;
@@ -93,16 +91,16 @@ public class BacktrackGenerator extends Generator
 		int cellRow = board.getRow(position);
 		int cellColumn = board.getColumn(position);
 		
-		//Used to determine which numbers are legal in the current position.
-		Boolean[] valid = new Boolean[board.getBoardSize()];
-		Arrays.fill(valid, Boolean.TRUE);
-
 		//Find illegal numbers
 		ArrayList<Integer> illegalNumbers = new ArrayList<Integer>();
 		illegalNumbers.addAll(board.getRowValuesBeforePosition(position));
 		illegalNumbers.addAll(board.getColumnValuesBeforePosition(position));
 		illegalNumbers.addAll(board.getMajorCellValuesBeforePosition(position));
 		
+		//Used to determine which numbers are legal in the current position.
+		Boolean[] valid = new Boolean[board.getBoardSize()];
+		Arrays.fill(valid, Boolean.TRUE);
+
 		//Remove illegal numbers from available options
 		for (int i = 0; i < illegalNumbers.size(); i++)
 		{
@@ -110,8 +108,7 @@ public class BacktrackGenerator extends Generator
 		}		
 		
 		//Generate a list of valid moves
-		ArrayList<Integer> tempList = new ArrayList<Integer>();
-		
+		ArrayList<Integer> tempList = new ArrayList<Integer>();		
 		for (int i = 0; i < board.getBoardSize(); i++)
 		{
 			if (valid[i])
@@ -119,8 +116,7 @@ public class BacktrackGenerator extends Generator
 		}
 		
 		//Randomize list
-		ArrayList<Integer> numbers = new ArrayList<Integer>();
-		
+		ArrayList<Integer> numbers = new ArrayList<Integer>();		
 		while(tempList.size() > 0)
 		{
 			int index = r.nextInt(tempList.size());
@@ -128,7 +124,7 @@ public class BacktrackGenerator extends Generator
 			tempList.remove(index);
 		}
 		
-		//---Try each valid move
+		//Try each valid move
 		for (int i = 0; i < numbers.size(); i++)
 		{
 			if (!completed)
@@ -140,7 +136,6 @@ public class BacktrackGenerator extends Generator
 				else
 					fillCell(position + 1);
 			}
-
 		}		
 	}
 }

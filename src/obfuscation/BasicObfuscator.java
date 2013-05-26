@@ -17,9 +17,6 @@ import tools.SudokuBoard;
 
 public class BasicObfuscator extends Obfuscator
 {
-	public static final int MAX_DELETED_CELLS = 30;
-	public static final int MIN_DELETED_CELLS = 20;
-
 	SudokuBoard board;
 	Random r;
 	boolean completed;
