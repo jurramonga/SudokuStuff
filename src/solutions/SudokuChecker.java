@@ -7,40 +7,8 @@ import tools.SudokuBoard;
 
 public class SudokuChecker 
 {	
-	static SudokuBoard board;
-	
-	/*public static boolean checkSolution(SudokuBoard sudokuBoard)
-	{		
-		//int[][] board = sudokuBoard.getBoard();
-		
-		for (int i = 0; i < 9; i++)
-		{
-			int[] group = new int[9];
-			
-			//For each row
-			for (int j = 0; j < 9; j++)
-			{
-				group[j] = board[i][j];
-			}
-			
-			if(!checkGroup(group))
-				return false;
-			
-			//For each column
-			group = new int[9];
-			for (int j = 0; j < 9; j++)
-			{
-				group[j] = board[j][i];
-			}
-			
-			if (!checkGroup(group))
-				return false;
-		}
-		
-		
-		return true;
-	}*/
-	
+	static SudokuBoard board;	
+
 	public static boolean checkSolution(SudokuBoard oldBoard)
 	{
 		board = new SudokuBoard(oldBoard);

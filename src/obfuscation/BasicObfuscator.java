@@ -1,25 +1,25 @@
 package obfuscation;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import solutions.BacktrackSolver;
+import tools.Log;
 import tools.SudokuBoard;
 
 /**
  * BasicObfuscator.java
  * @author Jason Prindle
  *
- * Sets a random number of cells to 0, checking after each one to be sure the puzzle still has 1 solution.
+ * Sets a number of cells to 0, checking after each one to be sure the puzzle still has 1 solution.
  */
-
-//TODO: Prevent this class from locking up (by becoming unsolvable)
-//TODO: Improve speed by keeping track of (and skipping) cells that can't be changed
 
 public class BasicObfuscator extends Obfuscator
 {
 	SudokuBoard board;
 	Random r;
 	boolean completed;
+	ArrayList<Integer> unchecked;
 	
 	public BasicObfuscator()
 	{
@@ -32,11 +32,8 @@ public class BasicObfuscator extends Obfuscator
 	}
 	
 	public SudokuBoard obfuscate(SudokuBoard board, float percentage)
-	{
-		completed = false;
+	{		
 		this.board = new SudokuBoard(board);
-		
-		int removalCount = (int)(Math.pow(board.getBoardSize(), 2) * percentage);
 		
 		//Check that the starting board is a valid, solved puzzle
 		for(int i = 0; i < board.getBoardSize(); i++)
@@ -52,8 +49,22 @@ public class BasicObfuscator extends Obfuscator
 			}
 		}	
 		
-		int count = removalCount;
-		clearCell(count);
+		int size = board.getBoardSize();
+		int removalCount = (int)(Math.pow(size, 2) * percentage);
+		completed = false;
+		
+		while(!completed)
+		{
+			this.board = new SudokuBoard(board);
+			unchecked = new ArrayList<Integer>();
+			for (int i = 0; i < size*size; i++)
+			{
+				unchecked.add(i);
+			}
+			
+			clearCell(removalCount);
+		}
+		
 		return this.board;
 	}
 	
@@ -65,30 +76,39 @@ public class BasicObfuscator extends Obfuscator
 			return;
 		}
 		
-		int row;
-		int column;
+		int position;
 		int oldValue;
 		
 		int solutions = 0;
-		while(solutions != 1)
+		do
 		{
-			do
+			if (unchecked.size() < count)
 			{
-				row = r.nextInt(board.getBoardSize());
-				column = r.nextInt(board.getBoardSize());
-				oldValue = board.getCell(row,column);
+				Log.output("Obfuscator stuck. Retrying.");
+				return;
 			}
-			while (oldValue == 0);
+			else
+			{
+				Log.output(count + " " + unchecked.toString());
+			}
+			int index = r.nextInt(unchecked.size());
+			position = unchecked.get(index);
+			oldValue = board.getCell(position);
+			unchecked.remove(index);
 			
-			board.setCell(row, column, 0);
+			board.setCell(position, 0);
 			
-			solutions = BacktrackSolver.findSolutions(board).size();
+			
+			/* This really slows things down. All I need to do find 2 different solutions. Not all of them.
+			 */
+			solutions = BacktrackSolver.hasMultipleSolutions(board);
 			
 			if (solutions != 1)
 			{
-				board.setCell(row, column, oldValue);
+				board.setCell(position, oldValue);
 			}
 		}
+		while (solutions != 1);
 		
 		clearCell(count-1);
 	}

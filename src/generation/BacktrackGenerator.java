@@ -17,9 +17,12 @@ import tools.SudokuBoard;
 
 public class BacktrackGenerator extends Generator 
 {
+	/* Number of failed attempts to make progress before the generator resets.
+	 * It wouldn't be a bad idea to make this change based on the puzzle size.
+	 */	
 	public static final int STUCK_THRESHOLD = 10000;
 	
-	/* This boolean is used to escape the method stack. */
+
 	boolean completed;
 	Random r;
 	SudokuBoard board;

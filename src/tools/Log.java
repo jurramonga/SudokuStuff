@@ -2,7 +2,7 @@ package tools;
 
 public class Log 
 {
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 	
 	public static void output(String output)
 	{

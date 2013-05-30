@@ -13,6 +13,7 @@ import tools.SudokuBoard;
 public class BacktrackSolver 
 {
 	static boolean completed;
+	static boolean stopAtTwo;
 	static SudokuBoard board;
 	static ArrayList<SudokuBoard> boards;
 	
@@ -23,6 +24,7 @@ public class BacktrackSolver
 	
 	public static ArrayList<SudokuBoard> findSolutions(SudokuBoard inputBoard)
 	{
+		stopAtTwo = false;
 		completed = false;
 		board = new SudokuBoard(inputBoard);
 		boards = new ArrayList<SudokuBoard>();
@@ -32,12 +34,30 @@ public class BacktrackSolver
 		return boards;
 	}
 	
+	public static int hasMultipleSolutions(SudokuBoard input)
+	{
+		stopAtTwo = true;
+		completed = false;
+		board = new SudokuBoard(input);
+		boards = new ArrayList<SudokuBoard>();
+		
+		fillCell(0);
+		
+		return boards.size();
+	}
+	
 	private static void fillCell(int position)
 	{
 		//If the puzzle is completed...
 		if (position > Math.pow(board.getBoardSize(), 2) - 1)
 		{
 			boards.add(new SudokuBoard(board));
+			
+			if(stopAtTwo && boards.size() > 1)
+			{
+				completed = true;
+				return;
+			}
 		}
 		//If this cell is already filled in, skip it.
 		else if (board.getCell(position) != 0)
@@ -62,7 +82,7 @@ public class BacktrackSolver
 			//Use each legal option
 			for (int i = 0; i < board.getBoardSize(); i++)
 			{
-				if (valid[i])
+				if (!completed && valid[i])
 				{
 					board.setCell(position, i+1);
 					fillCell(position + 1);
