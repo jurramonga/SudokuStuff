@@ -41,7 +41,7 @@ public class BacktrackGenerator extends Generator
 	
 	public SudokuBoard generate()
 	{
-		Log.output("BacktrackGenerator: Generating a new size-" + boardSize + " board.");
+		//Log.output("BacktrackGenerator: Generating a new size-" + boardSize + " board.");
 		board = new SudokuBoard(boardSize);
 		completed = false;
 		progressCounter = 0;
@@ -62,7 +62,7 @@ public class BacktrackGenerator extends Generator
 			}
 		}
 		
-		Log.output("BacktrackGenerator: Completed a size " + boardSize + "board.");
+		//Log.output("BacktrackGenerator: Completed a size " + boardSize + "board.");
 		//Log.output(board.toString());
 		
 		return board;
@@ -82,7 +82,7 @@ public class BacktrackGenerator extends Generator
 			
 			if (progressCounter > STUCK_THRESHOLD)
 			{
-				Log.output("Board appears to be stuck. Retrying.");
+				//Log.output("Board appears to be stuck. Retrying.");
 				return;
 			}
 		}		

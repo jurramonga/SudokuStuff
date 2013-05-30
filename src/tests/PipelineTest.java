@@ -19,7 +19,7 @@ import tools.SudokuBoard;
 
 public class PipelineTest 
 {
-	public static final int BOARD_SIZE = 16;
+	public static final int BOARD_SIZE = 9;
 	public static final int SEED = 20947;
 	public static final int TEST_CASES = 100;
 	
@@ -29,7 +29,7 @@ public class PipelineTest
 	{
 		BacktrackGenerator gen = new BacktrackGenerator(BOARD_SIZE, SEED);
 		BasicObfuscator obs = new BasicObfuscator(SEED);
-		
+		  
 		long trueStart;
 		long start;
 		long total;
